@@ -1,13 +1,14 @@
-from sqlalchemy import Column, String, Enum, Boolean, DateTime, func, ForeignKey, Integer
+from sqlalchemy import Column, String, Enum, Boolean, DateTime, func, ForeignKey, Integer, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import DeclarativeBase
 
 import uuid
 import enum
 
 
-Base = declarative_base()
+class Base(DeclarativeBase):
+    pass
 
 
 class Role(enum.Enum):
@@ -20,10 +21,10 @@ class Group(Base):
     __tablename__ = 'groups'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String, nullable=False)
+    name = Column(String(60), nullable=False)
     created_at = Column(DateTime, default=func.now())
 
-    users = relationship("User", back_populates="groups")
+    users = relationship("User", back_populates="groups", lazy='subquery')
 
 
 class User(Base):
@@ -37,10 +38,10 @@ class User(Base):
     email = Column(String(90), unique=True)
     password = Column(String(64))
     role = Column(Enum(Role))
-    group_id = Column(Integer, ForeignKey('groups.id', ondelete='CASCADE'))  # Assuming Group is another table
-    image_s3_path = Column(String(256))
+    group_id = Column(Integer, ForeignKey('groups.id', ondelete='CASCADE'))
+    image_s3_path = Column(Text)
     is_blocked = Column(Boolean)
     created_at = Column(DateTime, default=func.now())
     modified_at = Column(DateTime, onupdate=func.now())
 
-    groups = relationship("Group", back_populates="users")
+    groups = relationship("Group", back_populates="users", lazy='joined')

@@ -1,36 +1,11 @@
-import uuid
-import jwt
-import os
-from datetime import datetime, timedelta
-
 from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from dotenv import load_dotenv
 from sqlalchemy.exc import SQLAlchemyError
 
-from src.config import get_config
 from src.auth import utils, models
 
-load_dotenv('.env')
 
-settings = get_config(os.getenv("CONFIG"))
-
-oath2_scheme = OAuth2PasswordBearer(tokenUrl='login')
-
-SECRET_KEY = settings.secret_key
-ALGORITHM = settings.algorithm
-ACCESS_TOKEN_EXPIRE_MINUTES = settings.access_token_expire_minutes
-
-
-async def create_access_token(data: dict):
-    to_encode = data.copy()
-    if 'user_id' in to_encode and isinstance(to_encode['user_id'], uuid.UUID):
-        to_encode['user_id'] = str(to_encode['user_id'])
-    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode.update({"exp": expire})
-
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+# oath2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 
 
 # async def verify_access_token(token: str, credentials_exception):

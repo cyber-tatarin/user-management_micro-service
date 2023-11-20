@@ -1,4 +1,3 @@
-from typing import List, Type
 from pydantic_settings import BaseSettings
 
 
@@ -7,26 +6,11 @@ class Settings(BaseSettings):
     secret_key: str
     algorithm: str
     access_token_expire_minutes: int
+    refresh_token_expire_days: int
 
     class Config:
         env_file = ".env"
         extra = "allow"
-
-
-class DevConfig(Settings):
-    CONFIG_NAME: str = "dev"
-
-
-class ProdConfig(Settings):
-    CONFIG_NAME: str = "prod"
-
-
-def get_config(config):
-    return config_by_name[config]
-
-
-EXPORT_CONFIGS: List[Type[Settings]] = [
-    DevConfig,
-    ProdConfig,
-]
-config_by_name = {cfg().CONFIG_NAME: cfg() for cfg in EXPORT_CONFIGS}
+        
+        
+settings = Settings()

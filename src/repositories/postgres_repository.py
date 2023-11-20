@@ -3,17 +3,11 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
-from src.config import get_config
+from src.config import settings
 from src.auth import models
 
-import os
 from abc import ABC, abstractmethod
 from typing import Optional
-from dotenv import load_dotenv
-
-load_dotenv('.env')
-
-settings = get_config(os.getenv("CONFIG"))
 
 
 DATABASE_URL = settings.database_url

@@ -1,18 +1,10 @@
-import os
 from src.auth import router as auth_router
-from src.config import get_config
 
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 
-from dotenv import load_dotenv
 
-
-load_dotenv('.env')
 app = FastAPI()
-
-
-settings = get_config(os.getenv("CONFIG"))
 
 
 origins = ["*"]

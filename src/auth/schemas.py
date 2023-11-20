@@ -8,16 +8,10 @@ class NewUserCred(BaseModel):
     email: EmailStr
     password: str
 
-    class Config:           #pydantic работает только с dict, эта строчка позволяет работать с любым типом
-        orm_mode = True
-        
 
 class RespUser(BaseModel):
     id: uuid.UUID
     created_at: datetime
-
-    class Config:           #pydantic работает только с dict, эта строчка позволяет работать с любым типом
-        orm_mode = True
 
 
 class UserLogin(BaseModel):
